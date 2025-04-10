@@ -15,11 +15,14 @@ const port = process.env.PORT || 3000;
 
 // Connect to MongoDB
 connectDB();
+const corsOptions = {
+    origin: process.env.FRONTEND_ORIGIN || "https://enchanting-lolly-86d5a6.netlify.app/",
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+  };
+app.use(cors(corsOptions));
 
-app.use(cors({
-    origin:  "http://127.0.0.1:5501", // default for Vite/React
-    credentials: true,
-}));
 
 // Sessions
 app.use(session({
