@@ -15,15 +15,15 @@ function ensureAdmin(req, res, next) {
 
 
 // GET /admin/users - Fetch all users
-// router.get("/admin/users", ensureAdmin, async (req, res) => {
-//     try {
-//         const users = await User.find({});
-//         return res.json(users);
-//     } catch (err) {
-//         console.error("Error fetching users:", err);
-//         return res.status(500).json({ success: false, message: "Error fetching users" });
-//     }
-// });
+router.get("/admin/users", ensureAdmin, async (req, res) => {
+    try {
+        const users = await User.find({});
+        return res.json(users);
+    } catch (err) {
+        console.error("Error fetching users:", err);
+        return res.status(500).json({ success: false, message: "Error fetching users" });
+    }
+});
 
 
 // routes/auth.js
@@ -147,20 +147,35 @@ router.put("/admin/ban/:id", ensureAdmin, async (req, res) => {
 });
 
 // 4. Delete user
+// router.delete("/admin/delete/:id", ensureAdmin, async (req, res) => {
+//     const { id } = req.params;
+//     try {
+//         const user = await User.findById(id);
+//         if (!user) {
+//             return res.status(404).json({ success: false, message: "User not found" });
+//         }
+
+//         await user.remove();
+//         return res.json({ success: true, message: "User deleted successfully" });
+//     } catch (err) {
+//         console.error("Delete user error:", err);
+//         return res.status(500).json({ success: false, message: "Error deleting user" });
+//     }
+// });
+
 router.delete("/admin/delete/:id", ensureAdmin, async (req, res) => {
     const { id } = req.params;
     try {
-        const user = await User.findById(id);
+        const user = await User.findByIdAndDelete(id);
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
-
-        await user.remove();
         return res.json({ success: true, message: "User deleted successfully" });
     } catch (err) {
         console.error("Delete user error:", err);
         return res.status(500).json({ success: false, message: "Error deleting user" });
     }
 });
+
 
 module.exports = router;
