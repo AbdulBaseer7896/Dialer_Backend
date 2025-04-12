@@ -39,12 +39,19 @@ router.post("/login", async (req, res) => {
             return res.status(403).json({ success: false, message: "Account banned" });
         }
 
+        console.log("This is ther user = " , user)
+
         // Sanitize user data (exclude sensitive fields)
         const sanitizedUser = {
             email: user.email,
             domain: user.domain,
             role: user.role,
             fullName: user.fullName,
+            sipUsername: user.sipUsername,
+            sipPassword: user.sipPassword,
+            secureWebSocketServer: user.secureWebSocketServer,
+            webSocketPort: user.webSocketPort,
+            webSocketPath: user.webSocketPath,
             status: user.status
         };
 
