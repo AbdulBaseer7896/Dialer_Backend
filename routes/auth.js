@@ -70,6 +70,33 @@ router.post("/login", async (req, res) => {
 });
 
 
+// routes/admin.js
+router.put('/admin/toggle-ban/:userId', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        
+        user.status = user.status === 'active' ? 'banned' : 'active';
+        await user.save();
+        res.json({ message: `User ${user.status} successfully` });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.put('/admin/update-password/:userId', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        
+        user.password = req.body.newPassword;
+        await user.save();
+        res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // GET /api/logout - logout route
 router.get("/logout", (req, res) => {
     req.session.destroy(err => {
