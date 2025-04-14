@@ -15,15 +15,27 @@ const port = process.env.PORT || 3000;
 
 // Connect to MongoDB
 connectDB();
+// const corsOptions = {
+//     origin: process.env.FRONTEND_ORIGIN || "https://manual.bitnexdial.com",
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//     credentials: true
+//   };
+// app.use(cors(corsOptions));
+
 const corsOptions = {
-    origin: process.env.FRONTEND_ORIGIN || "https://manual.bitnexdial.com",
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      // or any origin requested.
+      callback(null, true);
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    credentials: true // Note: if credentials are true, you cannot use '*' as the origin.
   };
-app.use(cors(corsOptions));
-
-
+  
+  app.use(cors(corsOptions));
+  
 // Sessions
 app.use(session({
     secret: process.env.SESSION_SECRET || "supersecret",
